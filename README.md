@@ -23,7 +23,7 @@
 参考`biliup`项目的danmuka模块代码，可以看到该项目引用了一个webmssdk.es5.js的文件用来构建signature参数
 ![](image/5.png)
 ![](image/6.png)
-从`_getSocketParams()` debug进入，会看到调用`H()`方法用多个参数构建md5，md5传入`frontierSign()`进行构建signature，该函数来源自webmssdk.es5.js，该项目也参考这个方法，引入golang的js解释器，生成签名
+从`_getSocketParams()` debug进入，会看到调用`H()`方法用多个参数构建md5，md5传入`frontierSign()`进行构建signature，该函数来源自webmssdk.es5.js，本项目也参考这个方法，引入golang的js解释器，生成签名
 ![](image/7.png)
 ![](image/8.png)
 ![](image/9.png)
@@ -32,12 +32,12 @@
 ![](image/11.png)
 ![](image/12.png)
 
-实际开发中发现websocket服务端会不定时的断开连接，直播关闭后也只是发送了一个关闭ws连接的信号，如果此时发送心跳的话依然可以接受到pong回应。无法正确判断直播是否关闭。最终参考`biliup`代码，发送请求周期性的检测直播是否关闭。
+实际开发中发现websocket服务端会不定时的断开连接，直播关闭后也只是发送了一个关闭ws连接的信号，如果此时发送心跳的话依然可以接受到pong回应。无法正确判断直播是否关闭，也不能正确判断是否开播。最终参考`biliup`代码，由新的协程周期性的检测直播状态，控制websocket连接的开始和停止。
 
 ![](image/13.png)
 ![](image/14.png)
 
-该请求返回值包含status代码，2则为正在直播。本项目选取这种弹幕websocket连接无线重连，由外部周期性的检测控制连接开始停止。另外导出了rpc接口供其他程序控制弹幕监控协程。
+该请求返回值包含status代码，2则为正在直播。另外导出了rpc接口供其他程序控制弹幕监控协程。
 
 ![](image/15.png)
 
