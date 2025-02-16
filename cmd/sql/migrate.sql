@@ -1,3 +1,5 @@
+SET search_path TO live;
+
 create table common_messages
 (
     id               bigint not null
@@ -17,17 +19,6 @@ create table common_messages
 alter table common_messages
     owner to postgres;
 
-create index common_messages_room_display_id_index
-    on common_messages (room_display_id);
-
-create index common_messages_timestamp_index
-    on common_messages (timestamp);
-
-create index common_messages_user_id_index
-    on common_messages (user_id);
-
-create index common_messages_user_name_index
-    on common_messages (user_name);
 
 create table gift_messages
 (
@@ -55,18 +46,6 @@ create table gift_messages
 alter table gift_messages
     owner to postgres;
 
-create index gift_messages_room_display_id_index
-    on gift_messages (room_display_id);
-
-create index gift_messages_timestamp_index
-    on gift_messages (timestamp);
-
-create index gift_messages_to_user_id_index
-    on gift_messages (to_user_id);
-
-create index gift_messages_user_id_index
-    on gift_messages (user_id);
-
 create table users
 (
     id         bigserial
@@ -79,8 +58,6 @@ create table users
 alter table users
     owner to postgres;
 
-create index idx_users_user_id
-    on users (user_id);
 
 create table live_confs
 (
@@ -105,3 +82,14 @@ create table live_confs
 
 alter table live_confs
     owner to postgres;
+
+-- 创建新索引
+-- common_messages 表索引
+CREATE INDEX idx_common_messages_user_id_timestamp ON common_messages (user_id, timestamp DESC);
+CREATE INDEX idx_common_messages_timestamp ON common_messages (timestamp DESC);
+
+-- gift_messages 表索引
+CREATE INDEX idx_gift_messages_user_id_timestamp ON gift_messages (user_id, timestamp DESC);
+CREATE INDEX idx_gift_messages_timestamp ON gift_messages (timestamp DESC);
+
+CREATE INDEX idx_users_user_id ON users (user_id);
