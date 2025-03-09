@@ -1,5 +1,7 @@
 # danmu-core
 
+> 原项目地址：https://github.com/w1zpony/dy-danmu
+
 > 抖音直播的弹幕和礼物抓取，并存储至数据库
 
 **示例:**
